@@ -1,4 +1,8 @@
-from Ast import *
+from Ast.Expr_Assign import Expr_Assign
+from Ast.Expr_FuncCall import Expr_FuncCall
+from Ast.Expr_Variable import Expr_Variable
+from Ast.Scalar_String import Scalar_String
+from Ast.Stmt_Expression import Stmt_Expression
 
 def parse_scalar_string(json_node):
   value = json_node["value"]
