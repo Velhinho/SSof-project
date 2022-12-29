@@ -1,6 +1,8 @@
-class EndBlock:
+from CFGraph.Block import Block
+
+class EndBlock(Block):
   def print(self):
     print("END")
 
-  def propagate(env, policy):
+  def taint_analysis(self, env):
     pass

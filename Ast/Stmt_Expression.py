@@ -15,3 +15,6 @@ class Stmt_Expression(Node):
     print("  " * indentation + "Stmt_Expression (")
     self.expr_node.print(indentation + 1)
     print("  " * indentation + ")")
+
+  def eval(self, env):
+    return self.expr_node.eval(env)

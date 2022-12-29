@@ -1,3 +1,4 @@
+import Policy
 from Ast.Node import Node
 
 class BoolExpr(Node):
@@ -11,5 +12,7 @@ class BoolExpr(Node):
   def print(self, indentation):
     print("  " * indentation + str(self))
 
-  def eval(self, env, policy):
-    pass
+  def eval(self, env):
+    lab1 = self.left_node.eval(env)
+    lab2 = self.right_node.eval(env)
+    return Policy.glb(lab1, lab2)

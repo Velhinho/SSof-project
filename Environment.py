@@ -1,19 +1,35 @@
+import Policy
+
 class Environment:
-    def __init__(self, pattern):
-        self.pattern = pattern
-        self.indentation = 0
-        self.labenv = {}
-        self.sources = []
-        for source in pattern["sources"]:
-            self.sources.append(source)
-            self.labenv[source] = "T"
-        self.sinks = pattern["sinks"]
-        self.implicit = pattern["implicit"] == "yes"
-        # stores context
-        self.pc = "UT"
+  def __init__(self, pattern):
+    self.labels = {}
+    self.sources = pattern["sources"].copy()
+    self.sinks = pattern["sinks"].copy()
+    for source in self.sources:
+      self.labels[source] = Policy.bottom(source)
+    for sink in self.sinks:
+      self.labels[sink] = Policy.top()
+    self.implicit = pattern["implicit"] == "yes"
+    # stores context
+    self.pc = Policy.top()
+    self.illegal_flows = []
 
-    def get_level(self, variable):
-        return self.labenv[variable]
+  def __repr__(self) -> str:
+    return str(self.__dict__)
 
-    def allow_implicit(self):
-        return self.implicit
+  def get_labels_copy(self):
+    return self.labels.copy()
+
+  def set_labels(self, labels):
+    self.labels = labels
+
+  def get_label(self, variable):
+    return self.labels[variable]
+
+  def set_label(self, variable, lab):
+    if Policy.is_bottom(lab) and variable in self.sinks:
+      self.illegal_flows.append({"sink": variable, "src": Policy.get_source(lab)})
+    self.labels[variable] = lab
+
+  def allow_implicit(self):
+    return self.implicit

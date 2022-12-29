@@ -1,22 +1,20 @@
-class TUTPolicy():
+def get_sec_classes():
+  return {"T", "UT"}
 
-    def get_sec_classes(self):
-        return {"T", "UT"}
+def glb(lab1, lab2):
+  return lab1 if lab1["level"] == "T" else lab2
 
-    def glb(self, lab1, lab2):
-        if lab1=="T" or lab2=="T":
-            return "T"
-        else:
-            return "UT"
+def lub(lab1, lab2):
+  return lab1 if lab1["level"] == "UT" else lab2
 
-    def lub(self, lab1, lab2):
-        if lab1=="UT" or lab2=="UT":
-            return "UT"
-        else:
-            return "T"
+def is_bottom(lab):
+  return lab["level"] == "T"
 
-    def bottom(self):
-        return "T"
+def get_source(lab):
+  return lab["source"]
 
-    def top(self):
-        return "UT"
+def bottom(src):
+  return {"level": "T", "source": src}
+
+def top():
+  return {"level": "UT", "source": None}

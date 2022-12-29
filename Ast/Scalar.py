@@ -1,3 +1,4 @@
+import Policy
 from Ast.Node import Node
 
 class Scalar(Node):
@@ -9,3 +10,6 @@ class Scalar(Node):
 
   def print(self, indentation):
     print("  " * indentation + str(self))
+
+  def eval(self, env):
+    return Policy.top()

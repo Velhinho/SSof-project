@@ -13,3 +13,8 @@ class Expr_Assign(Node):
     print("  " * (indentation + 1) + self.var)
     self.expr.print(indentation + 1)
     print("  " * indentation + ")")
+
+  def eval(self, env):
+    lab = self.expr.eval(env)
+    env.set_label(self.var, lab)
+    return lab

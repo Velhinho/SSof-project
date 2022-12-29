@@ -1,3 +1,4 @@
+import Policy
 from Ast.Node import Node
 
 class Expr_Variable(Node):
@@ -9,3 +10,11 @@ class Expr_Variable(Node):
 
   def print(self, indentation):
     print("  " * indentation + str(self))
+
+  def eval(self, env):
+    try:
+      return env.get_label(self.name)
+    except KeyError:
+      lab = Policy.bottom(self.name)
+      env.set_label(self.name, lab)
+      return lab
