@@ -11,9 +11,10 @@ def eval():
     patterns = json.loads(patterns_f.read())
     env = Environment(patterns[0])
     ast = json_parse.parse_stmts(json_nodes)
+#    print(ast)
     first_block = connect_stmts.connect_stmts(ast, EndBlock())
     first_block.taint_analysis(env)
-    print(env)
+    print(env.illegal_flows)
 #    return ast.eval(env, patterns)
 
 eval()

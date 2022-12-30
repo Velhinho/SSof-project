@@ -1,3 +1,4 @@
+import Policy
 from Ast.Node import Node
 
 class Expr_Assign(Node):
@@ -14,7 +15,15 @@ class Expr_Assign(Node):
     self.expr.print(indentation + 1)
     print("  " * indentation + ")")
 
+  # $a = b()
+  # get_label(a) -> {"level": "T", "sources": [a, b]}
+
   def eval(self, env):
-    lab = self.expr.eval(env)
+    expr_lab = self.expr.eval(env)
+    try:
+      var_lab = env.get_label(self.var)
+    except KeyError:
+      var_lab = Policy.top()
+    lab = Policy.glb(expr_lab, var_lab)
     env.set_label(self.var, lab)
     return lab

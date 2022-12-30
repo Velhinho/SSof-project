@@ -28,7 +28,7 @@ class Environment:
 
   def set_label(self, variable, lab):
     if Policy.is_bottom(lab) and variable in self.sinks:
-      self.illegal_flows.append({"sink": variable, "src": Policy.get_source(lab)})
+      self.illegal_flows.append({"sink": variable, "src": Policy.get_sources(lab)})
     self.labels[variable] = lab
 
   def allow_implicit(self):

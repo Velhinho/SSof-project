@@ -1,20 +1,25 @@
-def get_sec_classes():
-  return {"T", "UT"}
+def create_label(level, sources):
+  return {"level": level, "sources": sources}
+
+def get_sources(lab):
+  return lab["sources"]
+
+def get_level(lab):
+  return lab["level"]
 
 def glb(lab1, lab2):
-  return lab1 if lab1["level"] == "T" else lab2
-
-def lub(lab1, lab2):
-  return lab1 if lab1["level"] == "UT" else lab2
+  if is_bottom(lab1) and is_bottom(lab2):
+    return create_label("T", lab1["sources"].union(lab2["sources"]))
+  elif is_bottom(lab1):
+    return lab1  
+  else:
+    return lab2
 
 def is_bottom(lab):
   return lab["level"] == "T"
 
-def get_source(lab):
-  return lab["source"]
-
 def bottom(src):
-  return {"level": "T", "source": src}
+  return create_label("T", set([src]))
 
 def top():
-  return {"level": "UT", "source": None}
+  return create_label("UT", set())

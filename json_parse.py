@@ -12,10 +12,10 @@ def parse_scalar(json_node):
 
 def parse_expr_variable(json_node):
   name = json_node["name"]
-  return Expr_Variable(name=name)
+  return Expr_Variable(name="$" + name)
 
 def parse_expr_assign(json_node):
-  var = json_node["var"]["name"]
+  var = "$" + json_node["var"]["name"]
   expr_node = parse_expression(json_node["expr"])
   return Expr_Assign(var=var, expr_node=expr_node)
 
