@@ -5,10 +5,13 @@ class Environment:
     self.labels = {}
     self.sources = pattern["sources"].copy()
     self.sinks = pattern["sinks"].copy()
+    self.sanitizers = pattern["sanitizers"].copy()
     for source in self.sources:
       self.labels[source] = Policy.bottom(source)
     for sink in self.sinks:
       self.labels[sink] = Policy.top()
+    for sanitizer in self.sanitizers:
+      self.labels[sanitizer] = Policy.top()
     self.implicit = pattern["implicit"] == "yes"
     # stores context
     self.pc = Policy.top()
@@ -25,10 +28,11 @@ class Environment:
 
   def get_label(self, variable):
     return self.labels[variable]
+  
+  def add_illegal_flow(self, sink, srcs, sanitizer):
+    self.illegal_flows.append({"sink": sink, "src": srcs.copy(), "sanitizers": sanitizer.copy()})
 
   def set_label(self, variable, lab):
-    if Policy.is_bottom(lab) and variable in self.sinks:
-      self.illegal_flows.append({"sink": variable, "src": Policy.get_sources(lab)})
     self.labels[variable] = lab
 
   def allow_implicit(self):

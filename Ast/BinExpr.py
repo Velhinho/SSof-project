@@ -1,7 +1,7 @@
 import Policy
 from Ast.Node import Node
 
-class BoolExpr(Node):
+class BinExpr(Node):
   def __init__(self, left_node, right_node) -> None:
     self.left_node = left_node
     self.right_node = right_node

@@ -15,9 +15,6 @@ class Expr_Assign(Node):
     self.expr.print(indentation + 1)
     print("  " * indentation + ")")
 
-  # $a = b()
-  # get_label(a) -> {"level": "T", "sources": [a, b]}
-
   def eval(self, env):
     expr_lab = self.expr.eval(env)
     try:
@@ -25,5 +22,7 @@ class Expr_Assign(Node):
     except KeyError:
       var_lab = Policy.top()
     lab = Policy.glb(expr_lab, var_lab)
+    if self.var in env.sinks and Policy.is_bottom(lab):
+      env.add_illegal_flow(self.var, Policy.get_sources(lab), Policy.get_sanitizers(lab))
     env.set_label(self.var, lab)
     return lab

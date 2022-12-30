@@ -24,16 +24,17 @@ class Expr_FuncCall(Node):
     return ret
 
   def eval(self, env):
-    try:
-      func_label = env.get_label(self.name)
-    except KeyError:
-      func_label = Policy.top()
-      env.set_label(self.name, func_label)
-    args_labels = [arg.eval(env) for arg in self.args]
-    # max_label = functools.reduce(lambda l1, l2: Policy.glb(l1, l2), labels)
-    arg_label = Policy.top()
-    for lab in args_labels:
-      arg_label = Policy.glb(arg_label, lab)
-    final_label = Policy.glb(func_label, arg_label)
-    env.set_label(self.name, final_label)
-    return final_label
+    func_label = Policy.bottom(self.name) if self.name in env.sources else Policy.top()
+    arg_label = eval_args(self.args, env)
+    if self.name in env.sanitizers and Policy.is_bottom(arg_label):
+      Policy.add_sanitizer(arg_label, self.name)
+    if self.name in env.sinks and Policy.is_bottom(arg_label):
+      env.add_illegal_flow(self.name, Policy.get_sources(arg_label), Policy.get_sanitizers(arg_label))
+    return Policy.glb(func_label, arg_label)
+
+def eval_args(args, env):
+  args_labels = [arg.eval(env) for arg in args]
+  arg_label = Policy.top()
+  for lab in args_labels:
+    arg_label = Policy.glb(arg_label, lab)
+  return arg_label

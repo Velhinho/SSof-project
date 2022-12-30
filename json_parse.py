@@ -4,7 +4,7 @@ from Ast.Expr_Variable import Expr_Variable
 from Ast.Scalar import Scalar
 from Ast.Stmt_Expression import Stmt_Expression
 from Ast.Stmt_If import Stmt_If
-from Ast.BoolExpr import BoolExpr
+from Ast.BinExpr import BinExpr
 
 def parse_scalar(json_node):
   value = json_node["value"]
@@ -27,14 +27,14 @@ def parse_expr_func_call(json_node):
     args.append(node)
   return Expr_FuncCall(name=name, args=args)
 
-def parse_bool_expr(json_node):
+def parse_bin_expr(json_node):
   left = parse_expression(json_node["left"])
   right = parse_expression(json_node["right"])
-  return BoolExpr(left_node=left, right_node=right)
+  return BinExpr(left_node=left, right_node=right)
 
 def parse_expression(json_node):
   scalars = ["Scalar_String", "Scalar_LNumber"]
-  bool_expr = ["Expr_BinaryOp_Greater", "Expr_BinaryOp_Smaller"]
+  bin_expr_type = ["Expr_BinaryOp_Greater", "Expr_BinaryOp_Smaller", "Expr_BinaryOp_Equal", "Expr_BinaryOp_Plus"]
   nodeType = json_node["nodeType"]
   if nodeType in scalars:
     return parse_scalar(json_node)
@@ -44,8 +44,8 @@ def parse_expression(json_node):
     return parse_expr_assign(json_node)
   elif nodeType == "Expr_FuncCall":
     return parse_expr_func_call(json_node)
-  elif nodeType in bool_expr:
-    return parse_bool_expr(json_node)
+  elif nodeType in bin_expr_type:
+    return parse_bin_expr(json_node)
   else:
     raise ValueError("expected expression node")
 
