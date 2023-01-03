@@ -13,6 +13,7 @@ def eval():
     ast = json_parse.parse_stmts(json_nodes)
 #    print(ast)
     first_block = connect_stmts.connect_stmts(ast, EndBlock())
+#    first_block.print()
     first_block.taint_analysis(env)
     print(env.illegal_flows)
 #    return ast.eval(env, patterns)

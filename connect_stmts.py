@@ -5,3 +5,8 @@ def connect_stmts(stmts, end_block):
     block = stmt.build_cfg(next_block)
     next_block = block
   return block
+
+# stmt = [A, B], endblock = Endblock()
+# B -> Endblock
+# A -> B
+# A -> B -> Endblock
