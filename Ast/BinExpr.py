@@ -15,4 +15,4 @@ class BinExpr(Node):
   def eval(self, env):
     lab1 = self.left_node.eval(env)
     lab2 = self.right_node.eval(env)
-    return Policy.glb(lab1, lab2)
+    return lab1.glb(lab2)

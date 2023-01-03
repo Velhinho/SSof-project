@@ -1,37 +1,40 @@
-def create_label(level, sources, sanitizers):
-  return {
-    "level": level, 
-    "sources": sources, 
-    "sanitizers": sanitizers
-    }
+class Flow:
+  def __init__(self, source, sanitizers) -> None:
+    self.source = source
+    self.sanitizers = sanitizers
+  
+  def __repr__(self) -> str:
+    return str(self.__dict__)
 
-def get_sources(lab):
-  return lab["sources"]
+  def add_sanitizer(self, sanitizer):
+    return Flow(self.source, self.sanitizers + [sanitizer])
+  
+class Label:
+  def __init__(self, level, flows) -> None:
+    self.level = level
+    self.flows = flows
 
-def get_level(lab):
-  return lab["level"]
+  def __repr__(self) -> str:
+    return str(self.__dict__)
 
-def get_sanitizers(lab):
-  return lab["sanitizers"]
+  def add_sanitizer(self, sanitizer):
+    flows = [flow.add_sanitizer(sanitizer) for flow in self.flows]
+    return Label(self.level, flows)
 
-def add_sanitizer(lab, sanitizer):
-  lab["sanitizers"].add(sanitizer)
-
-def is_bottom(lab):
-  return get_level(lab) == "T"
+  def is_bottom(self):
+    return self.level == "T"
+  
+  def glb(self, lab):
+    if self.is_bottom() and lab.is_bottom():
+      flows = self.flows + lab.flows
+      return Label("T", flows)
+    elif self.is_bottom():
+      return self
+    else:
+      return lab
 
 def bottom(src):
-  return create_label("T", set([src]), set())
+  return Label("T", [Flow(source=src, sanitizers=[])])
 
 def top():
-  return create_label("UT", set(), set())
-
-def glb(lab1, lab2):
-  if is_bottom(lab1) and is_bottom(lab2):
-    union_sources = get_sources(lab1).union(get_sources(lab2))
-    union_sanitizers = get_sanitizers(lab1).union(get_sanitizers(lab2))
-    return create_label("T", union_sources, union_sanitizers)
-  elif is_bottom(lab1):
-    return lab1  
-  else:
-    return lab2
+  return Label("UT", [Flow(source=None, sanitizers=[])])

@@ -26,15 +26,15 @@ class Expr_FuncCall(Node):
   def eval(self, env):
     func_label = Policy.bottom(self.name) if self.name in env.sources else Policy.top()
     arg_label = eval_args(self.args, env)
-    if self.name in env.sanitizers and Policy.is_bottom(arg_label):
-      Policy.add_sanitizer(arg_label, self.name)
-    if self.name in env.sinks and Policy.is_bottom(arg_label):
-      env.add_illegal_flow(self.name, Policy.get_sources(arg_label), Policy.get_sanitizers(arg_label))
-    return Policy.glb(func_label, arg_label)
+    if self.name in env.sanitizers and arg_label.is_bottom():
+      arg_label = arg_label.add_sanitizer(self.name)
+    if self.name in env.sinks and arg_label.is_bottom():
+      env.add_illegal_flow(self.name, arg_label)
+    return func_label.glb(arg_label)
 
 def eval_args(args, env):
   args_labels = [arg.eval(env) for arg in args]
   arg_label = Policy.top()
   for lab in args_labels:
-    arg_label = Policy.glb(arg_label, lab)
+    arg_label = arg_label.glb(lab)
   return arg_label

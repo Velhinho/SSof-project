@@ -29,8 +29,8 @@ class Environment:
   def get_label(self, variable):
     return self.labels[variable]
   
-  def add_illegal_flow(self, sink, srcs, sanitizer):
-    self.illegal_flows.append({"sink": sink, "src": srcs.copy(), "sanitizers": sanitizer.copy()})
+  def add_illegal_flow(self, sink, label):
+    self.illegal_flows.append({"sink": sink, "label": label})
 
   def set_label(self, variable, lab):
     self.labels[variable] = lab
