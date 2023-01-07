@@ -1,6 +1,6 @@
 from Ast.Node import Node
 from connect_stmts import connect_stmts
-from CFGraph.Stmt_While_Block import Stmt_While_Block
+from CFGraph.StmtWhileBlock import Stmt_While_Block
 
 class Stmt_While(Node):
   def __init__(self, cond, stmts) -> None:

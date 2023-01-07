@@ -1,5 +1,5 @@
 from Ast.Node import Node
-from CFGraph.Stmt_Expr_Block import Stmt_Expr_Block
+from CFGraph.StmtExprBlock import Stmt_Expr_Block
 
 class Stmt_Expression(Node):
   def __init__(self, expr_node: Node):

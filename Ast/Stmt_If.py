@@ -1,5 +1,5 @@
 from Ast.Node import Node
-from CFGraph.Stmt_If_Block import Stmt_If_Block
+from CFGraph.StmtIfBlock import Stmt_If_Block
 from connect_stmts import connect_stmts
 
 class Stmt_If(Node):
