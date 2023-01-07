@@ -4,6 +4,7 @@ from Ast.Expr_Variable import Expr_Variable
 from Ast.Scalar import Scalar
 from Ast.Stmt_Expression import Stmt_Expression
 from Ast.Stmt_If import Stmt_If
+from Ast.Stmt_While import Stmt_While
 from Ast.BinExpr import BinExpr
 
 def parse_scalar(json_node):
@@ -59,12 +60,19 @@ def parse_stmt_if(json_node):
   else_stmts = parse_stmts(json_node["else"]["stmts"]) if json_node["else"] is not None else None
   return Stmt_If(cond_expr=cond, if_stmts=if_stmts, else_stmts=else_stmts)
 
+def parse_stmt_while(json_node):
+  cond = parse_expression(json_node["cond"])
+  stmts = parse_stmts(json_node["stmts"])
+  return Stmt_While(cond=cond, stmts=stmts)
+
 def parse_stmt(json_node):
   nodeType = json_node["nodeType"]
   if nodeType == "Stmt_Expression":
     return parse_stmt_expression(json_node)
   elif nodeType == "Stmt_If":
     return parse_stmt_if(json_node)
+  elif nodeType == "Stmt_While":
+    return parse_stmt_while(json_node)
   elif nodeType == "Stmt_Nop": # Stmt_Nop represents a comment
     return None
   else:

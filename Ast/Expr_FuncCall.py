@@ -17,12 +17,6 @@ class Expr_FuncCall(Node):
       arg.print(indentation + 1)
     print("  " * indentation + ")")
 
-  def reduce(f, l):
-    ret = l[0]
-    for elem in l:
-      ret = f(ret, elem)
-    return ret
-
   def eval(self, env):
     func_label = Policy.bottom(self.name) if self.name in env.sources else Policy.top()
     arg_label = eval_args(self.args, env)
