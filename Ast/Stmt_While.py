@@ -1,6 +1,6 @@
 from Ast.Node import Node
 from connect_stmts import connect_stmts
-from CFGraph.StmtWhileBlock import Stmt_While_Block
+from CFGraph.StmtWhileBlock import StmtWhileBlock
 
 class Stmt_While(Node):
   def __init__(self, cond, stmts) -> None:
@@ -17,4 +17,4 @@ class Stmt_While(Node):
 
   def build_cfg(self, next_block):
     while_block = connect_stmts(self.stmts, next_block)
-    return Stmt_While_Block(self.cond_expr, while_block, next_block)
+    return StmtWhileBlock(self.cond_expr, while_block, next_block)

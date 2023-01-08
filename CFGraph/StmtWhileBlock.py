@@ -1,4 +1,4 @@
-class Stmt_While_Block:
+class StmtWhileBlock:
   def __init__(self, cond, while_block, next_block) -> None:
     self.cond_expr = cond
     self.while_block = while_block

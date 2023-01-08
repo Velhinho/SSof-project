@@ -1,6 +1,6 @@
 from CFGraph.Block import Block
 
-class Stmt_If_Block(Block):
+class StmtIfBlock(Block):
   def __init__(self, cond_expr, if_block, else_block) -> None:
     self.cond_expr = cond_expr
     self.if_block = if_block
