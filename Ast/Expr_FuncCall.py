@@ -19,7 +19,8 @@ class Expr_FuncCall(Node):
 
   def eval(self, env):
     func_label = Policy.bottom(self.name) if self.name in env.sources else Policy.top()
-    arg_label = eval_args(self.args, env)
+    explicit_arg_label = eval_args(self.args, env)
+    arg_label = explicit_arg_label.glb(env.pc) if env.implicit else explicit_arg_label
     if self.name in env.sanitizers and arg_label.is_bottom():
       arg_label = arg_label.add_sanitizer(self.name)
     if self.name in env.sinks and arg_label.is_bottom():

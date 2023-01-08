@@ -16,12 +16,12 @@ def eval():
   #    print(ast)
       first_block = connect_stmts.connect_stmts(ast, EndBlock())
       first_block.taint_analysis(env)
-      #print(env.illegal_flows)
+      print(env.illegal_flows)
       pattern_outputs = create_output(pattern, env)
       for pattern_output in pattern_outputs:
         output.append(pattern_output)
     #pretty print
-    print(json.dumps(output, indent=4))
+    #print(json.dumps(output, indent=4))
 
 def create_output(pattern, env):
   outputs = {}

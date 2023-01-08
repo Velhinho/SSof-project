@@ -21,7 +21,8 @@ class Expr_Assign(Node):
       var_lab = env.get_label(self.var)
     except KeyError:
       var_lab = Policy.top()
-    lab = expr_lab.glb(var_lab)
+    explicit_lab = expr_lab.glb(var_lab)
+    lab = explicit_lab.glb(env.pc) if env.implicit else explicit_lab
     if self.var in env.sinks and lab.is_bottom():
       env.add_illegal_flow(self.var, lab)
     env.set_label(self.var, lab)

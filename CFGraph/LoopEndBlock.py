@@ -8,30 +8,35 @@ class LoopEndBlock(Block):
     self.next_block = next_block
     self.loop_counter = 0
 
+
+  def run_body(self, env):
+      cond_lab = self.cond_expr.eval(env)
+      env.set_pc(cond_lab.glb(env.pc))
+      self.while_block.taint_analysis(env)
+
   def taint_analysis(self, env):
     if self.loop_counter == 0:
       old_labels = env.get_labels_copy()
+      old_pc = env.pc
 
       # RUN BODY TWICE
       self.loop_counter = 1
-      self.cond_expr.eval(env)
-      self.while_block.taint_analysis(env)
+      self.run_body(env)
       env.set_labels(old_labels) # reset labels before next path
 
       # RUN BODY ONCE
       self.loop_counter = 2
-      self.cond_expr.eval(env)
-      self.while_block.taint_analysis(env)
+      self.run_body(env)
       env.set_labels(old_labels) # reset labels before next path
 
       # SKIP BODY
+      env.set_pc(old_pc)
       self.loop_counter = 0
       self.cond_expr.eval(env)
       self.next_block.taint_analysis(env)
     elif self.loop_counter == 1:
       self.loop_counter = 2
-      self.cond_expr.eval(env)
-      self.while_block.taint_analysis(env)
+      self.run_body(env)
     elif self.loop_counter == 2:
       self.cond_expr.eval(env)
       self.next_block.taint_analysis(env)
