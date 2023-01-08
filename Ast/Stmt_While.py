@@ -1,6 +1,7 @@
 from Ast.Node import Node
 from connect_stmts import connect_stmts
-from CFGraph.StmtWhileBlock import StmtWhileBlock
+from CFGraph.LoopStartBlock import LoopStartBlock
+from CFGraph.LoopEndBlock import LoopEndBlock
 
 class Stmt_While(Node):
   def __init__(self, cond, stmts) -> None:
@@ -16,5 +17,10 @@ class Stmt_While(Node):
       stmt.print(indentation + 1)
 
   def build_cfg(self, next_block):
-    while_block = connect_stmts(self.stmts, next_block)
-    return StmtWhileBlock(self.cond_expr, while_block, next_block)
+    loop_end = LoopEndBlock(next_block)
+    while_block = connect_stmts(self.stmts, loop_end)
+    loop_start = LoopStartBlock(loop_end)
+    loop_end.loop_start_block = loop_start
+    loop_end.cond_expr = self.cond_expr
+    loop_end.while_block = while_block
+    return loop_start
