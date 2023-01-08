@@ -20,6 +20,9 @@ class Environment:
   def __repr__(self) -> str:
     return str(self.__dict__)
 
+  def set_pc(self, label):
+    self.pc = label
+
   def get_labels_copy(self):
     return self.labels.copy()
 

@@ -1,6 +1,6 @@
 from CFGraph.Block import Block
 
-class Stmt_Expr_Block(Block):
+class StmtExprBlock(Block):
   def __init__(self, stmt_expr, next_block) -> None:
     self.stmt_expr = stmt_expr
     self.next_block = next_block

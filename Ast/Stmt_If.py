@@ -1,5 +1,5 @@
 from Ast.Node import Node
-from CFGraph.Stmt_If_Block import Stmt_If_Block
+from CFGraph.StmtIfBlock import StmtIfBlock
 from connect_stmts import connect_stmts
 
 class Stmt_If(Node):
@@ -14,7 +14,7 @@ class Stmt_If(Node):
   def build_cfg(self, next_block):
     if_block = connect_stmts(self.if_stmts, next_block)
     else_block = connect_stmts(self.else_stmts, next_block)
-    return Stmt_If_Block(self.cond_expr, if_block, else_block)
+    return StmtIfBlock(self.cond_expr, if_block, else_block)
 
   def print(self, indentation):
     print("  " * indentation + "Stmt_If (")
