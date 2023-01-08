@@ -35,7 +35,7 @@ def parse_bin_expr(json_node):
 
 def parse_expression(json_node):
   scalars = ["Scalar_String", "Scalar_LNumber"]
-  bin_expr_type = ["Expr_BinaryOp_Greater", "Expr_BinaryOp_Smaller", "Expr_BinaryOp_Equal", "Expr_BinaryOp_Plus"]
+  bin_expr_type = ["Expr_BinaryOp_Greater", "Expr_BinaryOp_Smaller", "Expr_BinaryOp_Equal", "Expr_BinaryOp_Plus", "Expr_BinaryOp_Concat"]
   nodeType = json_node["nodeType"]
   if nodeType in scalars:
     return parse_scalar(json_node)
@@ -47,6 +47,8 @@ def parse_expression(json_node):
     return parse_expr_func_call(json_node)
   elif nodeType in bin_expr_type:
     return parse_bin_expr(json_node)
+  elif nodeType == "Expr_Preinc":
+    return parse_expr_variable(json_node["var"])
   else:
     raise ValueError("expected expression node")
 
