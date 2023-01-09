@@ -7,6 +7,7 @@ from Ast.Stmt_If import Stmt_If
 from Ast.Stmt_While import Stmt_While
 from Ast.BinExpr import BinExpr
 from Ast.Expr_ArrayDimFetch import Expr_ArrayDimFetch
+from Ast.Expr_ConstFetch import Expr_ConstFetch
 
 def parse_scalar(json_node):
   value = json_node["value"]
@@ -15,6 +16,10 @@ def parse_scalar(json_node):
 def parse_expr_variable(json_node):
   name = json_node["name"]
   return Expr_Variable(name="$" + name)
+
+def parse_const_fetch(json_node):
+  name = json_node["name"]["parts"][0]
+  return Expr_ConstFetch(name=name)
 
 def parse_expr_assign(json_node):
   var = "$" + json_node["var"]["name"]
@@ -43,6 +48,8 @@ def parse_expression(json_node):
   nodeType = json_node["nodeType"]
   if nodeType[:6] == "Scalar":
     return parse_scalar(json_node)
+  elif nodeType == "Expr_ConstFetch":
+    return parse_const_fetch(json_node)
   elif nodeType == "Expr_Variable":
     return parse_expr_variable(json_node)
   elif nodeType == "Expr_Assign":
