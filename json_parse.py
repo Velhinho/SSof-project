@@ -40,7 +40,7 @@ def parse_arraydimfetch(json_node):
   return Expr_ArrayDimFetch(var=var, dim=dim)
 
 def parse_expression(json_node):
-  scalars = ["Scalar_String", "Scalar_LNumber"]
+  scalars = ["Scalar_String", "Scalar_LNumber", "Scalar_DNumber"]
   bin_expr_type = ["Expr_BinaryOp_Greater", "Expr_BinaryOp_Smaller", "Expr_BinaryOp_Equal", "Expr_BinaryOp_Plus", "Expr_BinaryOp_Concat"]
   nodeType = json_node["nodeType"]
   if nodeType in scalars:
