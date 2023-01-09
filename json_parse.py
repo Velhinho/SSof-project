@@ -75,6 +75,15 @@ def parse_stmt_while(json_node):
   stmts = parse_stmts(json_node["stmts"])
   return Stmt_While(cond=cond, stmts=stmts)
 
+def parse_stmt_echo(json_node):
+  name = "echo"
+  exprs = []
+  for expr in json_node["exprs"]:
+    node = parse_expression(expr)
+    exprs.append(node)
+  funcCall = Expr_FuncCall(name=name, args=exprs) # echo is basically a call to a function named "echo"
+  return Stmt_Expression(funcCall)
+
 def parse_stmt(json_node):
   nodeType = json_node["nodeType"]
   if nodeType == "Stmt_Expression":
@@ -83,6 +92,8 @@ def parse_stmt(json_node):
     return parse_stmt_if(json_node)
   elif nodeType == "Stmt_While":
     return parse_stmt_while(json_node)
+  elif nodeType == "Stmt_Echo":
+    return parse_stmt_echo(json_node)
   elif nodeType == "Stmt_Nop": # Stmt_Nop represents a comment
     return None
   else:
