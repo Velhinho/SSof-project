@@ -6,6 +6,7 @@ from Ast.Stmt_Expression import Stmt_Expression
 from Ast.Stmt_If import Stmt_If
 from Ast.Stmt_While import Stmt_While
 from Ast.BinExpr import BinExpr
+from Ast.Expr_ArrayDimFetch import Expr_ArrayDimFetch
 
 def parse_scalar(json_node):
   value = json_node["value"]
@@ -33,6 +34,11 @@ def parse_bin_expr(json_node):
   right = parse_expression(json_node["right"])
   return BinExpr(left_node=left, right_node=right)
 
+def parse_arraydimfetch(json_node):
+  var = parse_expr_variable(json_node["var"])
+  dim = parse_scalar(json_node["dim"])
+  return Expr_ArrayDimFetch(var=var, dim=dim)
+
 def parse_expression(json_node):
   scalars = ["Scalar_String", "Scalar_LNumber"]
   bin_expr_type = ["Expr_BinaryOp_Greater", "Expr_BinaryOp_Smaller", "Expr_BinaryOp_Equal", "Expr_BinaryOp_Plus", "Expr_BinaryOp_Concat"]
@@ -47,6 +53,8 @@ def parse_expression(json_node):
     return parse_expr_func_call(json_node)
   elif nodeType in bin_expr_type:
     return parse_bin_expr(json_node)
+  elif nodeType == "Expr_ArrayDimFetch":
+    return parse_arraydimfetch(json_node)
   elif nodeType == "Expr_Preinc":
     return parse_expr_variable(json_node["var"])
   else:

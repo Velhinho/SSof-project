@@ -1,6 +1,5 @@
 import Policy
 from Ast.Node import Node
-import functools
 
 class Expr_FuncCall(Node):
   def __init__(self, name: str, args: list):
