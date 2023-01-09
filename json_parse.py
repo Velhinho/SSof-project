@@ -60,7 +60,7 @@ def parse_expression(json_node):
     return parse_bin_expr(json_node)
   elif nodeType == "Expr_ArrayDimFetch":
     return parse_arraydimfetch(json_node)
-  elif nodeType == "Expr_Preinc":
+  elif nodeType in ["Expr_PreInc", "Expr_PreDec", "Expr_PostInc", "Expr_PostDec"]:
     return parse_expr_variable(json_node["var"])
   else:
     raise ValueError("expected expression node")
@@ -99,6 +99,8 @@ def parse_stmt(json_node):
     return parse_stmt_while(json_node)
   elif nodeType == "Stmt_Echo":
     return parse_stmt_echo(json_node)
+  elif nodeType in ["Stmt_Break", "Stmt_Continue"]: # Not creating new paths created by breaks or continues
+    return None
   elif nodeType == "Stmt_Nop": # Stmt_Nop represents a comment
     return None
   else:
