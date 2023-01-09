@@ -52,7 +52,7 @@ def parse_expression(json_node):
     return parse_const_fetch(json_node)
   elif nodeType == "Expr_Variable":
     return parse_expr_variable(json_node)
-  elif nodeType == "Expr_Assign":
+  elif nodeType in ["Expr_Assign", "Expr_AssignOp_Plus"]:
     return parse_expr_assign(json_node)
   elif nodeType == "Expr_FuncCall":
     return parse_expr_func_call(json_node)
@@ -62,6 +62,8 @@ def parse_expression(json_node):
     return parse_arraydimfetch(json_node)
   elif nodeType in ["Expr_PreInc", "Expr_PreDec", "Expr_PostInc", "Expr_PostDec"]:
     return parse_expr_variable(json_node["var"])
+  elif nodeType in ["Expr_BitwiseNot", "Expr_BooleanNot"]:
+    return parse_expression(json_node["expr"])
   else:
     raise ValueError("expected expression node")
 
