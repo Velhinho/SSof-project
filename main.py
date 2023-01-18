@@ -28,9 +28,23 @@ def eval():
         #print(env.illegal_flows)
         pattern_outputs = create_output(sink_pattern, env)
         output += pattern_outputs
+    for pattern in output:
+      for idx, sanitized_flow in enumerate(pattern["sanitized flows"]):
+        pattern["sanitized flows"][idx] = list(set(sanitized_flow))
+    for pattern in output:
+      pattern["sanitized flows"] = list(set(tuple(flows) for flows in pattern["sanitized flows"]))
+    real_output = []
+    for pattern in output:
+      real_pattern = {}
+      real_pattern["vulnerability"] = pattern["vulnerability"]
+      real_pattern["source"] = pattern["source"]
+      real_pattern["sink"] = pattern["sink"]
+      real_pattern["unsanitized flows"] = pattern["unsanitized flows"]
+      real_pattern["sanitized flows"] = pattern["sanitized flows"]
+      real_output.append(real_pattern)
     #pretty print
-    print(json.dumps(output, indent=4))
-    output_f.write(json.dumps(output, indent=4))
+    print(json.dumps(real_output, indent=4))
+    output_f.write(json.dumps(real_output, indent=4))
 
 def create_output(pattern, env):
   sink_output = {}
